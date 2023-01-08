@@ -1,0 +1,99 @@
+﻿@page "/"
+
+@inject ILocalFontService LFonts;
+@inject IJSRuntime Js;
+
+<div class="container-fluid">
+
+    <h1>Local Font API</h1>
+
+    <hr />
+
+    <p>
+        Is
+        <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts"><code>queryLocalFonts</code></a>
+        supported:
+        @if (supported)
+        {
+            <span class="text-success">Yes</span>
+        }
+        else
+        {
+            <span class="text-danger">No</span>
+        }
+    </p>
+
+    @if (supported)
+    {
+        <p>
+            Permission to use Local Font API: @(permission).
+            To change permission manually, press the lock icon on the address bar.
+        </p>
+
+        <hr />
+
+        <div class="text-danger">
+            <p>
+                This is the exception when attempting to load the list when permission wasn't granted without user-gesture:
+                <pre>@(noGestureErr)</pre>
+            </p>
+        </div>
+
+        <hr />
+
+        <p>
+            <button class="btn btn-primary"
+                @onclick="RequestFontAsync">
+                Request Font List
+            </button>
+
+            <label>
+                <input type="checkbox" @bind="showDemo" />
+                Show Demo (may freeze the browser for a while)
+            </label>
+        </p>
+
+        @if (fonts is null)
+        {
+            <p>Press the above button to get the font list</p>
+        }
+        else
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>@(nameof(FontData.Family))</th>
+                        <th>@(nameof(FontData.FullName))</th>
+                        <th>@(nameof(FontData.PostScriptName))</th>
+                        <th>@(nameof(FontData.Style))</th>
+
+                        @if (showDemo)
+                        {
+                            <th>Demo</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var f in fonts)
+                    {
+                        <tr>
+                            <td>@(f.Family)</td>
+                            <td>@(f.FullName)</td>
+                            <td>@(f.PostScriptName)</td>
+                            <td>@(f.Style)</td>
+
+                            @if (showDemo)
+                            {
+                                <td>
+                                    <span style="font-family: @(f.Family);">
+                                        The quick brown fox jumps over the lazy dog
+                                    </span>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div>
