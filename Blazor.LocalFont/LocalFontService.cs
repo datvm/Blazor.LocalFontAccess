@@ -1,15 +1,63 @@
 ﻿namespace Blazor.LocalFont;
 
+/// <summary>
+/// Represents a service for <see href="https://developer.mozilla.org/en-US/docs/Web/API/Local_Font_Access_API">Local Font Access API</see>.
+/// </summary>
 public interface ILocalFontService
 {
-    
+
+    /// <summary>
+    /// Get the FontData objects representing the font faces available locally. The FontData objects are serialized for information.
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts">queryLocalFonts</see>
+    /// </summary>
+    /// <returns>An enumerable of FontData information</returns>
     Task<IEnumerable<FontData>> QueryLocalFontsAsync();
+    /// <summary>
+    /// Get the FontData objects representing the font faces available locally. The FontData objects are serialized for information.
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts">queryLocalFonts</see>
+    /// </summary>
+    /// <param name="postscriptNames">An array of font PostScript names. If this is specified, only fonts with PostScript names matching those in the array will be included in the results.</param>
+    /// <returns>An enumerable of FontData information</returns>
     Task<IEnumerable<FontData>> QueryLocalFontsAsync(IEnumerable<string>? postscriptNames);
+    /// <summary>
+    /// Get the FontData objects representing the font faces available locally. The FontData objects are serialized for information.
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts">queryLocalFonts</see>
+    /// </summary>
+    /// <param name="options">Contains optional configuration parameters.</param>
+    /// <returns>An enumerable of FontData information</returns>
     Task<IEnumerable<FontData>> QueryLocalFontsAsync(QueryLocalFontsOptions? options);
+
+    /// <summary>
+    /// Get the FontData objects representing the font faces available locally. 
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts">window.queryLocalFonts</see>
+    /// </summary>
+    /// <returns>A Font Collection that keeps reference to the Javascript object of the array of FontData</returns>
     Task<IFontDataRefCollection> QueryLocalFontsRefAsync();
+    /// <summary>
+    /// Get the FontData objects representing the font faces available locally. 
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts">window.queryLocalFonts</see>
+    /// </summary>
+    /// <param name="postscriptNames">An array of font PostScript names. If this is specified, only fonts with PostScript names matching those in the array will be included in the results.</param>
+    /// <returns>A Font Collection that keeps reference to the Javascript object of the array of FontData</returns>
     Task<IFontDataRefCollection> QueryLocalFontsRefAsync(IEnumerable<string>? postscriptNames);
+    /// <summary>
+    /// Get the FontData objects representing the font faces available locally. 
+    /// <see href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts">window.queryLocalFonts</see>
+    /// </summary>
+    /// <param name="options">Contains optional configuration parameters.</param>
+    /// <returns>A Font Collection that keeps reference to the Javascript object of the array of FontData</returns>
     Task<IFontDataRefCollection> QueryLocalFontsRefAsync(QueryLocalFontsOptions? options);
+
+    /// <summary>
+    /// Get the current Font (local-fonts) Permission state.
+    /// </summary>
+    /// <returns>The current state of local-fonts permission</returns>
     Task<FontPermission> GetPermissionAsync();
+
+    /// <summary>
+    /// Check if Local Font Access API is available
+    /// </summary>
+    /// <returns>true if <see href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts">queryLocalFonts</see>  is available. false otherwise.</returns>
     Task<bool> IsSupportedAsync();
 }
 
