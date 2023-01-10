@@ -1,0 +1,38 @@
+﻿@inject ILocalFontService LFonts;
+
+<h3>Search Fonts</h3>
+
+<div class="input-group mb-3">
+    <input @bind="keyword" class="form-control" placeholder="Enter font postscript names (case-sensitive) separated by commas" />
+    <button @onclick="SearchAsync" class="btn btn-primary">Search</button>
+</div>
+
+@if (fonts is not null)
+{
+    foreach (var f in fonts)
+    {
+        <p style="font-family: @(f.PostScriptName);">
+            @(f.PostScriptName)
+        </p>
+    }
+
+    if (!fonts.Any())
+    {
+        <p>No font found.</p>
+    }
+}
+
+@code {
+    string keyword = "Verdana,Consolas,ArialMT";
+    IEnumerable<FontData>? fonts;
+
+    async Task SearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(keyword)) { return; }
+
+        fonts = await LFonts.GetFontsAsync(
+            keyword
+                .Split(',')
+                .Select(s => s.Trim()));
+    }
+}
