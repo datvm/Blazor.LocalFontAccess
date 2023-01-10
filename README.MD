@@ -1,1 +1,7 @@
-See [Project README on GitHub](https://github.com/datvm/Blazor.LocalFontAccess)
+Documentation coming...
+
+[Nuget Package](https://www.nuget.org/packages/Blazor.LocalFont):
+
+```ps
+dotnet add package Blazor.LocalFont
+```
