@@ -1,0 +1,90 @@
+﻿@inject ILocalFontService LFonts;
+
+<div>
+    <h3>Keeping Reference to JS FontData</h3>
+
+    <p>
+        <button @onclick="RequestFontRefAsync" class="btn btn-primary">List and Show First Font Info</button>
+    </p>
+
+    @if (fontRefs is not null)
+    {
+        <p>Total Fonts: @(fontRefsLen)</p>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">
+                Request Font:
+            </span>
+            <input type="number" step="1" min="0" max="@(fontRefsLen)" class="form-control" @bind="fontIndexReq" />
+            <button @onclick="GetFontInfoAsync" class="btn btn-primary">
+                Get Font information
+            </button>
+        </div>
+
+        @if (currFontName is not null && currFontType is not null)
+        {
+            <p>
+                @(currFontName) is a @(currFontType) font.
+            </p>
+        }
+    }
+
+</div>
+
+@code {
+
+    IFontDataRefCollection? fontRefs;
+    long fontRefsLen;
+    long fontIndexReq = 0;
+
+    string? currFontName;
+    string? currFontType;
+
+    async Task RequestFontRefAsync()
+    {
+        fontRefs = await LFonts.GetFontsRefAsync();
+        fontRefsLen = await fontRefs.GetLengthAsync();
+    }
+
+    async Task GetFontInfoAsync()
+    {
+        if (fontRefs is null) { return; }
+
+        if (fontIndexReq >= fontRefsLen)
+        {
+            fontIndexReq = fontRefsLen - 1;
+        }
+
+        var font = await fontRefs.GetItemAsync(fontIndexReq);
+        var data = await font.GetFontDataAsync();
+
+        currFontName = data.FullName;
+
+        // From MDN example:
+        // https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts#accessing_low-level_data
+        using var stream = await font.GetFontFileAsync();
+        var buffer = new byte[4];
+        var count = await stream.ReadAsync(buffer, 0, 4);
+
+        if (count != 4)
+        {
+            currFontType = "Unknown";
+        }
+        else
+        {
+            var sfntVersion = System.Text.Encoding.UTF8.GetString(buffer);
+            switch (sfntVersion)
+            {
+                case "\x00\x01\x00\x00":
+                case "true":
+                case "typ1":
+                    currFontType = "truetype";
+                    break;
+                case "OTTO":
+                    currFontType = "cff";
+                    break;
+            }
+        }
+    }
+
+}

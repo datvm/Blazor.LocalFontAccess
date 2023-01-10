@@ -10,6 +10,15 @@ public enum FontPermission
 }
 
 /// <summary>
+/// Options for querying Local Fonts. From https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts
+/// </summary>
+public class QueryLocalFontsOptions
+{
+    [JsonPropertyName("postscriptNames")]
+    public IEnumerable<string>? PostscriptNames { get; set; }
+}
+
+/// <summary>
 /// Represent a Font. From https://developer.mozilla.org/en-US/docs/Web/API/FontData 
 /// </summary>
 public class FontData

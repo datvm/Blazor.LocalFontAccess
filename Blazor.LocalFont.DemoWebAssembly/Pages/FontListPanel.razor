@@ -1,0 +1,82 @@
+﻿@inject ILocalFontService LFonts;
+@inject IJSRuntime Js;
+
+<p>
+    <button class="btn btn-primary"
+            @onclick="RequestFontAsync">
+        Request Font List
+    </button>
+
+    <label>
+        <input type="checkbox" @bind="showDemo" />
+        Show Demo (may freeze the browser for a while)
+    </label>
+</p>
+
+@if (fonts is null)
+{
+    <p>Press the above button to get the font list</p>
+}
+else
+{
+    <div style="max-height: 60vh; overflow-y: auto">
+        <table class="table table-bordered d-block">
+            <thead>
+                <tr>
+                    <th>@(nameof(FontData.Family))</th>
+                    <th>@(nameof(FontData.FullName))</th>
+                    <th>@(nameof(FontData.PostScriptName))</th>
+                    <th>@(nameof(FontData.Style))</th>
+
+                    @if (showDemo)
+                    {
+                        <th>Demo</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in fonts)
+                {
+                    <tr>
+                        <td>@(f.Family)</td>
+                        <td>@(f.FullName)</td>
+                        <td>@(f.PostScriptName)</td>
+                        <td>@(f.Style)</td>
+
+                        @if (showDemo)
+                        {
+                            <td>
+                                <span style="font-family: @(f.Family);">
+                                    The quick brown fox jumps over the lazy dog
+                                </span>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public EventCallback PermissionMayChanged{ get; set; }
+
+    IEnumerable<FontData>? fonts;
+    bool showDemo = false;
+
+    async Task RequestFontAsync()
+    {
+        try
+        {
+            fonts = await LFonts.GetFontsAsync();
+        }
+        catch (Exception ex)
+        {
+            await Js.InvokeVoidAsync("alert", ex.ToString());
+        }
+
+        await PermissionMayChanged.InvokeAsync();
+    }
+
+}

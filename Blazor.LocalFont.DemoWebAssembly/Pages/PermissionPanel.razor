@@ -1,0 +1,36 @@
+﻿@inject ILocalFontService LFonts;
+
+<p>
+    Permission to use Local Font API: @(Permission).
+    To change permission manually, press the lock icon on the address bar.
+</p>
+
+<hr />
+
+<div class="text-danger">
+    <p>
+        This is the exception when attempting to load the list when permission wasn't granted without user-gesture:
+        <pre>@(noGestureErr)</pre>
+    </p>
+</div>
+
+@code {
+
+    [Parameter]
+    public FontPermission Permission { get; set; }
+
+    string? noGestureErr;
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            await LFonts.GetFontsAsync();
+        }
+        catch (Exception ex)
+        {
+            noGestureErr = ex.Message;
+        }
+    }
+
+}

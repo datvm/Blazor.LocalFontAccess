@@ -1,0 +1,20 @@
+﻿<p>
+    Is
+    <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queryLocalFonts"><code>queryLocalFonts</code></a>
+    supported:
+    @if (Supported)
+    {
+        <span class="text-success">Yes</span>
+    }
+    else
+    {
+        <span class="text-danger">No</span>
+    }
+</p>
+
+@code {
+
+    [Parameter]
+    public bool Supported { get; set; }
+
+}

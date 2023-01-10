@@ -20,7 +20,7 @@
             return perm.state;
         }
 
-        async getFontsAsync(keepReference) {
+        async getFontsAsync(query, keepReference) {
             if (!this.isSupported) {
                 throw new Error("NOT_SUPPORTED");
             }
@@ -32,7 +32,7 @@
 
             const fonts = await new Promise(async (r, rej) => {
                 try {
-                    var fonts = await queryLocalFonts();
+                    var fonts = await queryLocalFonts(query);
 
                     if (perm.state !== "granted") {
                         rej(permDenied);
@@ -47,14 +47,31 @@
             if (keepReference) {
                 return fonts;
             } else {
-                // Currently FontData objects cannot be serialized
-                return fonts.map(q => ({
-                    family: q.family,
-                    fullName: q.fullName,
-                    postscriptName: q.postscriptName,
-                    style: q.style,
-                }));    
+                // Currently FontData objects properties are not serialized
+                return fonts.map(f => this.serializeFontData(f));
             }
         }
+
+        async getFontStreamAsync(font) {
+            return await font.blob();
+        }
+
+        getArrLength(/** @type {Array} */arr) {
+            return arr.length;
+        }
+
+        getArrayItem(arr, index) {
+            return arr[index];
+        }
+
+        serializeFontData(font) {
+            return {
+                family: font.family,
+                fullName: font.fullName,
+                postscriptName: font.postscriptName,
+                style: font.style,
+            };
+        }
+
     }();
 }
