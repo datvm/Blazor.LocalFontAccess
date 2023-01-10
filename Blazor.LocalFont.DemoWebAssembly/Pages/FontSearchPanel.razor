@@ -30,7 +30,7 @@
     {
         if (string.IsNullOrWhiteSpace(keyword)) { return; }
 
-        fonts = await LFonts.GetFontsAsync(
+        fonts = await LFonts.QueryLocalFontsAsync(
             keyword
                 .Split(',')
                 .Select(s => s.Trim()));

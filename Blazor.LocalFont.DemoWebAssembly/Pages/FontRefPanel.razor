@@ -42,7 +42,7 @@
 
     async Task RequestFontRefAsync()
     {
-        fontRefs = await LFonts.GetFontsRefAsync();
+        fontRefs = await LFonts.QueryLocalFontsRefAsync();
         fontRefsLen = await fontRefs.GetLengthAsync();
     }
 

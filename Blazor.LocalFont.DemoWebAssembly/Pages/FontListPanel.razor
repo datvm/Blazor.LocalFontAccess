@@ -69,7 +69,7 @@ else
     {
         try
         {
-            fonts = await LFonts.GetFontsAsync();
+            fonts = await LFonts.QueryLocalFontsAsync();
         }
         catch (Exception ex)
         {

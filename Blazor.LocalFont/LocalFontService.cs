@@ -1,15 +1,14 @@
-﻿using System.Reflection.Metadata;
-
-namespace Blazor.LocalFont;
+﻿namespace Blazor.LocalFont;
 
 public interface ILocalFontService
 {
-    Task<IEnumerable<FontData>> GetFontsAsync();
-    Task<IEnumerable<FontData>> GetFontsAsync(IEnumerable<string>? postscriptNames);
-    Task<IEnumerable<FontData>> GetFontsAsync(QueryLocalFontsOptions? options);
-    Task<IFontDataRefCollection> GetFontsRefAsync();
-    Task<IFontDataRefCollection> GetFontsRefAsync(IEnumerable<string>? postscriptNames);
-    Task<IFontDataRefCollection> GetFontsRefAsync(QueryLocalFontsOptions? options);
+    
+    Task<IEnumerable<FontData>> QueryLocalFontsAsync();
+    Task<IEnumerable<FontData>> QueryLocalFontsAsync(IEnumerable<string>? postscriptNames);
+    Task<IEnumerable<FontData>> QueryLocalFontsAsync(QueryLocalFontsOptions? options);
+    Task<IFontDataRefCollection> QueryLocalFontsRefAsync();
+    Task<IFontDataRefCollection> QueryLocalFontsRefAsync(IEnumerable<string>? postscriptNames);
+    Task<IFontDataRefCollection> QueryLocalFontsRefAsync(QueryLocalFontsOptions? options);
     Task<FontPermission> GetPermissionAsync();
     Task<bool> IsSupportedAsync();
 }
@@ -33,29 +32,29 @@ internal class LocalFontService : ILocalFontService
         return Enum.Parse<FontPermission>(str, true);
     }
 
-    public Task<IEnumerable<FontData>> GetFontsAsync()
-        => GetFontsAsync((QueryLocalFontsOptions?)null);
+    public Task<IEnumerable<FontData>> QueryLocalFontsAsync()
+        => QueryLocalFontsAsync((QueryLocalFontsOptions?)null);
 
-    public Task<IEnumerable<FontData>> GetFontsAsync(IEnumerable<string>? postscriptNames)
-        => GetFontsAsync(postscriptNames is null ?
+    public Task<IEnumerable<FontData>> QueryLocalFontsAsync(IEnumerable<string>? postscriptNames)
+        => QueryLocalFontsAsync(postscriptNames is null ?
             null :
             new QueryLocalFontsOptions
             {
                 PostscriptNames = postscriptNames
             });
 
-    public async Task<IEnumerable<FontData>> GetFontsAsync(QueryLocalFontsOptions? options)
+    public async Task<IEnumerable<FontData>> QueryLocalFontsAsync(QueryLocalFontsOptions? options)
         => await InvokeJsAsync<IEnumerable<FontData>>("getFontsAsync", options, false);
 
-    public Task<IFontDataRefCollection> GetFontsRefAsync()
-        => GetFontsRefAsync((QueryLocalFontsOptions?)null);
+    public Task<IFontDataRefCollection> QueryLocalFontsRefAsync()
+        => QueryLocalFontsRefAsync((QueryLocalFontsOptions?)null);
 
-    public Task<IFontDataRefCollection> GetFontsRefAsync(IEnumerable<string>? postscriptNames)
-        => GetFontsRefAsync(postscriptNames is null ? 
+    public Task<IFontDataRefCollection> QueryLocalFontsRefAsync(IEnumerable<string>? postscriptNames)
+        => QueryLocalFontsRefAsync(postscriptNames is null ? 
             null : 
             new QueryLocalFontsOptions { PostscriptNames = postscriptNames });
 
-    public async Task<IFontDataRefCollection> GetFontsRefAsync(QueryLocalFontsOptions? options)
+    public async Task<IFontDataRefCollection> QueryLocalFontsRefAsync(QueryLocalFontsOptions? options)
     {
         var @ref = await InvokeJsAsync<IJSObjectReference>(
             "getFontsAsync", options, true);
