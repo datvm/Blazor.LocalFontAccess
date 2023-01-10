@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,7 +12,7 @@
 		<Version>7.0.0</Version>
 		<Authors>Luke Vo</Authors>
 		<Description>Local Font Access API interop for Blazor.</Description>
-		<Copyright>Copyright 2022 Luke Vo</Copyright>
+		<Copyright>Copyright 2023 Luke Vo</Copyright>
 		<PackageProjectUrl>https://github.com/datvm/Blazor.LocalFontAccess</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/datvm/Blazor.LocalFontAccess</RepositoryUrl>
 		<PackageTags>blazor,web api,font,Local Font Access</PackageTags>
