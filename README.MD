@@ -1,0 +1,1 @@
+See [Project README on GitHub](https://github.com/datvm/Blazor.LocalFontAccess)
